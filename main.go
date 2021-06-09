@@ -3,6 +3,7 @@ package main
 import (
 	"bytes"
 	"crypto/sha256"
+	"fmt"
 )
 
 // blockchain - public DB that doesn't rely on trust between nodes of data
@@ -21,7 +22,7 @@ type Block struct {
 // takes in a pointer to a block as a parameter
 func (b *Block) DeriveHash() {
 
-	info := bytes.Join([][]byte{b.Data, b.PrevHash}, []byte)
+	info := bytes.Join([][]byte{b.Data, b.PrevHash}, []byte{})
 	// trivial hashing algorithm using sha256 temporarily
 	hash := sha256.Sum256(info)
 	b.Hash = hash[:]
@@ -66,4 +67,12 @@ func main() {
 	chain.AddBlock("Second Block after Genesis")
 	chain.AddBlock("Third Block after Genesis")
 
+	// iterate through each block and print the fields in each block
+	for _, block := range chain.blocks {
+
+		fmt.Printf("Previous Hash: %x\n", block.PrevHash)
+		fmt.Printf("Data in Block: %s\n", block.Data)
+		fmt.Printf("Hash: %x\n", block.Hash)
+
+	}
 }
