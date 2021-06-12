@@ -12,7 +12,7 @@ import (
 
 // proof of work concept
 // want to secure blockchains to force networks to do computational work to sign block on blockchain
-
+// reason for security: to compromise data in block, you have to recalculate hash and recalculate every block after that block
 const Difficulty = 12
 
 type ProofOfWork struct {
@@ -62,6 +62,18 @@ func (pow *ProofOfWork) Run() (int, []byte) {
 	fmt.Println()
 
 	return nonce, hash[:] // returning a tuple
+
+}
+
+// after running pow algorithm on each block, a valid nonce will derive a hash which will have met the desired target
+func (pow *ProofOfWork) Validate() bool {
+
+	var intHash big.Int
+	data := pow.InitData(pow.Block.Nonce)
+	hash := sha256.Sum256(data) // convert data into hash
+	intHash.SetBytes(hash[:])   // convert hash to big int
+
+	return intHash.Cmp(pow.Target) == -1 // returns true if hash is less than target i.e. block is signed i.e. valid
 
 }
 
