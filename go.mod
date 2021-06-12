@@ -1,1 +1,3 @@
-module github.com/davidk101/blockchain-server.git
+module github.com/davidk101/golang-blockchain
+
+go 1.16
